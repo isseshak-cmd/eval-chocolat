@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Évaluation — Le Chocolat | CSVCA · François de Mahy</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════
+   VARIABLES & RESET
+════════════════════════════════════════ */
+:root{
+  --ink:#1a0d05; --deep:#2a1209; --roast:#3d1c0a; --bark:#6b3a1f;
+  --caramel:#b8712a; --gold:#d4a853; --pale-gold:#ede0bc;
+  --cream:#fdf8f0; --parchment:#f5ead8; --white:#ffffff;
+  --ok:#2d6a4f; --ok-light:#d4edda; --ko:#8b1a1a; --ko-light:#f8d7da;
+  --warn:#856404; --warn-light:#fff3cd;
+  --border:rgba(180,130,60,.2); --shadow:rgba(26,13,5,.12);
+  --r:12px; --r-sm:8px; --r-lg:20px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Jost',sans-serif;background:var(--ink);color:var(--ink);
+  min-height:100vh;overflow-x:hidden}
+
+/* ════════════════════════════════════════
+   COVER PAGE
+════════════════════════════════════════ */
+.cover{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:40px 24px;
+  background:linear-gradient(165deg,#1a0d05 0%,#2a1209 35%,#4a2010 70%,#6b3a1f 100%);
+  position:relative;overflow:hidden;text-align:center;
+}
+.cover::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 80%,rgba(212,168,83,.14) 0%,transparent 65%),
+    radial-gradient(circle 2px at 20% 30%,rgba(212,168,83,.4) 0%,transparent 100%),
+    radial-gradient(circle 1px at 80% 20%,rgba(212,168,83,.3) 0%,transparent 100%),
+    radial-gradient(circle 1.5px at 60% 70%,rgba(212,168,83,.25) 0%,transparent 100%);
+  pointer-events:none;
+}
+.cover-deco{
+  position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 60px,rgba(212,168,83,.025) 60px,rgba(212,168,83,.025) 61px),
+    repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(212,168,83,.025) 60px,rgba(212,168,83,.025) 61px);
+}
+.cover-badge{
+  font-size:.65rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);border:1px solid rgba(212,168,83,.35);
+  padding:7px 22px;border-radius:50px;margin-bottom:32px;
+  display:inline-flex;align-items:center;gap:8px;position:relative;
+}
+.school-logo{
+  width:58px;height:58px;border-radius:50%;background:rgba(212,168,83,.15);
+  border:2px solid rgba(212,168,83,.3);display:flex;align-items:center;
+  justify-content:center;font-size:1.6rem;margin:0 auto 20px;
+}
+.cover h1{
+  font-family:'Cormorant Garamond',serif;font-size:clamp(2.6rem,7vw,5.5rem);
+  color:var(--cream);line-height:1.05;margin-bottom:12px;
+  text-shadow:0 4px 32px rgba(0,0,0,.4);letter-spacing:.02em;
+}
+.cover h1 em{color:var(--gold);font-style:italic}
+.cover-subtitle{
+  font-size:.95rem;color:rgba(253,248,240,.55);margin-bottom:44px;
+  font-weight:300;letter-spacing:.05em;
+}
+.cover-meta{
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:40px;
+}
+.cover-chip{
+  background:rgba(253,248,240,.08);border:1px solid rgba(212,168,83,.25);
+  border-radius:50px;padding:8px 20px;font-size:.8rem;color:rgba(253,248,240,.7);
+  display:flex;align-items:center;gap:7px;font-weight:500;
+}
+.start-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--gold);color:var(--ink);font-weight:700;font-size:.95rem;
+  padding:15px 38px;border-radius:50px;border:none;cursor:pointer;
+  font-family:'Jost',sans-serif;letter-spacing:.04em;
+  box-shadow:0 6px 28px rgba(212,168,83,.4);transition:.3s;
+}
+.start-btn:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(212,168,83,.5)}
+.part-pills{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:48px;
+}
+.part-pill{
+  font-size:.68rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  color:rgba(253,248,240,.4);background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);padding:5px 14px;border-radius:50px;
+}
+
+/* ════════════════════════════════════════
+   PROGRESS BAR & HEADER
+════════════════════════════════════════ */
+.exam-header{
+  position:sticky;top:0;z-index:200;
+  background:rgba(26,13,5,.97);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(212,168,83,.18);
+  padding:12px 24px;display:flex;align-items:center;gap:16px;
+}
+.progress-bar{
+  flex:1;height:6px;background:rgba(212,168,83,.15);border-radius:50px;overflow:hidden;
+}
+.progress-fill{
+  height:100%;background:linear-gradient(90deg,var(--caramel),var(--gold));
+  border-radius:50px;transition:width .6s ease;width:0;
+}
+.progress-label{font-size:.75rem;color:rgba(253,248,240,.45);white-space:nowrap;font-weight:600}
+.header-score{
+  font-family:'Cormorant Garamond',serif;font-size:1.1rem;
+  color:var(--gold);white-space:nowrap;font-weight:600;
+}
+
+/* ════════════════════════════════════════
+   PART NAVIGATION
+════════════════════════════════════════ */
+.part-nav{
+  display:flex;overflow-x:auto;scrollbar-width:none;
+  background:rgba(42,18,9,.98);border-bottom:1px solid rgba(212,168,83,.12);
+  padding:0 12px;
+}
+.part-nav::-webkit-scrollbar{display:none}
+.part-btn{
+  padding:12px 16px;font-size:.73rem;font-weight:600;
+  color:rgba(253,248,240,.4);border:none;background:none;
+  border-bottom:2px solid transparent;cursor:pointer;
+  font-family:'Jost',sans-serif;white-space:nowrap;transition:.2s;
+  letter-spacing:.04em;text-transform:uppercase;
+}
+.part-btn:hover{color:var(--gold)}
+.part-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+.part-btn.done{color:var(--ok)}
+.part-btn.done::after{content:'✓';margin-left:5px;font-size:.7rem}
+
+/* ════════════════════════════════════════
+   MAIN CONTENT
+════════════════════════════════════════ */
+.exam-body{background:var(--cream);min-height:100vh}
+.part{display:none;animation:fadeUp .4s ease}
+.part.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ════════════════════════════════════════
+   PART HERO
+════════════════════════════════════════ */
+.part-hero{
+  background:linear-gradient(130deg,var(--roast),var(--bark));
+  padding:48px 24px 40px;color:var(--cream);
+}
+.part-hero-inner{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:22px}
+.part-number{
+  font-family:'Cormorant Garamond',serif;font-size:4.5rem;line-height:1;
+  color:rgba(212,168,83,.3);font-weight:700;flex-shrink:0;
+}
+.part-hero h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3.5vw,2.2rem);margin-bottom:6px}
+.part-hero p{color:rgba(253,248,240,.6);font-size:.88rem;line-height:1.6;font-weight:300}
+.part-pts{
+  margin-left:auto;flex-shrink:0;text-align:center;
+  background:rgba(212,168,83,.15);border:1px solid rgba(212,168,83,.3);
+  border-radius:12px;padding:12px 18px;
+}
+.part-pts .num{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold);font-weight:700}
+.part-pts .lbl{font-size:.65rem;color:rgba(253,248,240,.5);text-transform:uppercase;letter-spacing:.1em}
+
+/* ════════════════════════════════════════
+   QUESTION CARDS
+════════════════════════════════════════ */
+.questions{max-width:760px;margin:0 auto;padding:32px 20px 20px}
+
+.q-block{
+  background:var(--white);border-radius:var(--r-lg);margin-bottom:18px;
+  box-shadow:0 2px 20px var(--shadow);border:1px solid var(--border);overflow:hidden;
+  transition:.25s;
+}
+.q-header{
+  padding:20px 24px 0;display:flex;align-items:flex-start;gap:14px;
+}
+.q-num{
+  width:32px;height:32px;border-radius:50%;background:var(--roast);
+  color:var(--gold);font-weight:700;font-size:.8rem;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+}
+.q-text{font-size:.92rem;line-height:1.6;color:var(--ink);font-weight:500;flex:1}
+.q-pts{
+  font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--caramel);background:rgba(184,113,42,.1);
+  padding:3px 10px;border-radius:50px;flex-shrink:0;white-space:nowrap;
+}
+.q-body{padding:16px 24px 22px}
+
+/* MCQ */
+.mcq-opts{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.mcq-opt{
+  display:flex;align-items:center;gap:12px;padding:11px 16px;
+  border:2px solid var(--border);border-radius:var(--r-sm);cursor:pointer;
+  font-size:.87rem;color:#444;transition:.2s;user-select:none;
+  background:var(--parchment);
+}
+.mcq-opt:hover{border-color:var(--gold);background:rgba(212,168,83,.08)}
+.mcq-opt.sel{border-color:var(--gold);background:rgba(212,168,83,.12);color:var(--ink)}
+.mcq-opt.correct{border-color:var(--ok);background:var(--ok-light);color:var(--ok)}
+.mcq-opt.wrong{border-color:var(--ko);background:var(--ko-light);color:var(--ko)}
+.mcq-radio{
+  width:18px;height:18px;border-radius:50%;border:2px solid currentColor;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+}
+.mcq-dot{width:8px;height:8px;border-radius:50%;background:currentColor;display:none}
+.mcq-opt.sel .mcq-dot,.mcq-opt.correct .mcq-dot,.mcq-opt.wrong .mcq-dot{display:block}
+
+/* TRUE/FALSE */
+.tf-row{display:flex;gap:10px;margin-top:4px;flex-wrap:wrap}
+.tf-btn{
+  padding:10px 28px;border:2px solid var(--border);border-radius:50px;
+  font-size:.85rem;font-weight:700;cursor:pointer;background:var(--parchment);
+  color:#666;font-family:'Jost',sans-serif;transition:.2s;
+}
+.tf-btn:hover{border-color:var(--gold);background:rgba(212,168,83,.1)}
+.tf-btn.sel{border-color:var(--caramel);background:rgba(184,113,42,.12);color:var(--ink)}
+.tf-btn.correct{border-color:var(--ok);background:var(--ok-light);color:var(--ok)}
+.tf-btn.wrong{border-color:var(--ko);background:var(--ko-light);color:var(--ko)}
+
+/* FILL GAP */
+.gap-wrap{margin-top:8px}
+.fill-input{
+  border:2px solid var(--border);border-radius:var(--r-sm);
+  padding:10px 16px;font-family:'Jost',sans-serif;font-size:.9rem;
+  color:var(--ink);background:var(--parchment);outline:none;width:100%;
+  transition:.2s;
+}
+.fill-input:focus{border-color:var(--gold);background:#fff}
+.fill-input.correct{border-color:var(--ok);background:var(--ok-light)}
+.fill-input.wrong{border-color:var(--ko);background:var(--ko-light)}
+
+/* MATCHING */
+.match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+@media(max-width:540px){.match-wrap{grid-template-columns:1fr}}
+.match-col h5{
+  font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:#aaa;margin-bottom:8px;
+}
+.match-item{
+  padding:10px 14px;border:2px solid var(--border);border-radius:var(--r-sm);
+  font-size:.82rem;cursor:pointer;background:var(--parchment);
+  transition:.2s;user-select:none;color:#444;
+}
+.match-item:hover{border-color:var(--gold)}
+.match-item.sel{border-color:var(--gold);background:rgba(212,168,83,.12);color:var(--ink)}
+.match-item.ok{border-color:var(--ok);background:var(--ok-light);color:var(--ok)}
+.match-item.ko{border-color:var(--ko);background:var(--ko-light);color:var(--ko)}
+.match-def{cursor:pointer}
+
+/* TEXTAREA */
+.exam-textarea{
+  width:100%;border:2px solid var(--border);border-radius:var(--r-sm);
+  padding:14px 16px;font-family:'Jost',sans-serif;font-size:.88rem;
+  color:var(--ink);background:var(--parchment);outline:none;
+  resize:vertical;min-height:120px;line-height:1.7;transition:.2s;margin-top:8px;
+}
+.exam-textarea:focus{border-color:var(--gold);background:#fff}
+
+/* CALC FIELDS */
+.calc-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:10px}
+.calc-field label{
+  display:block;font-size:.7rem;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:#999;margin-bottom:6px;
+}
+.calc-field input,.calc-field select{
+  width:100%;border:2px solid var(--border);border-radius:var(--r-sm);
+  padding:10px 14px;font-family:'Jost',sans-serif;font-size:.9rem;
+  color:var(--ink);background:var(--parchment);outline:none;transition:.2s;
+}
+.calc-field input:focus,.calc-field select:focus{border-color:var(--gold);background:#fff}
+.calc-field input.correct{border-color:var(--ok);background:var(--ok-light)}
+.calc-field input.wrong{border-color:var(--ko);background:var(--ko-light)}
+
+/* Q FEEDBACK */
+.q-feedback{
+  border-radius:var(--r-sm);padding:11px 15px;font-size:.8rem;
+  line-height:1.6;margin-top:12px;display:none;
+}
+.q-feedback.show{display:block}
+.q-feedback.ok{background:var(--ok-light);color:var(--ok)}
+.q-feedback.warn{background:var(--warn-light);color:var(--warn)}
+.q-feedback.ko{background:var(--ko-light);color:var(--ko)}
+
+/* ════════════════════════════════════════
+   CONTEXT BOXES
+════════════════════════════════════════ */
+.context-box{
+  background:linear-gradient(135deg,rgba(107,58,31,.08),rgba(184,113,42,.06));
+  border:1px solid rgba(212,168,83,.3);border-radius:var(--r);
+  padding:18px 22px;margin-bottom:18px;
+}
+.context-box .ctx-title{
+  font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--caramel);margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
+.context-box p{font-size:.87rem;line-height:1.7;color:#444}
+.client-card{
+  background:var(--white);border-radius:var(--r);padding:18px 20px;
+  display:flex;gap:16px;align-items:flex-start;margin-bottom:14px;
+  box-shadow:0 2px 12px var(--shadow);border:1px solid var(--border);
+}
+.client-avatar{
+  font-size:2.2rem;width:52px;height:52px;border-radius:50%;
+  background:rgba(212,168,83,.12);display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;
+}
+.client-info h4{font-family:'Cormorant Garamond',serif;color:var(--roast);font-size:1rem;margin-bottom:4px}
+.client-info .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.client-tag{
+  font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:50px;
+  background:rgba(107,58,31,.08);color:var(--bark);
+}
+
+/* ════════════════════════════════════════
+   GRILLE ÉVALUATION ROLEPLAY
+════════════════════════════════════════ */
+.grille-wrap{overflow-x:auto;border-radius:var(--r);box-shadow:0 2px 16px var(--shadow)}
+.grille{width:100%;border-collapse:collapse;background:var(--white);min-width:560px}
+.grille thead th{
+  background:var(--roast);color:var(--gold);padding:12px 14px;
+  text-align:left;font-size:.72rem;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
+}
+.grille tbody td{
+  padding:12px 14px;font-size:.82rem;color:#444;
+  border-bottom:1px solid rgba(107,58,31,.06);vertical-align:middle;
+}
+.grille tbody tr:hover td{background:rgba(253,232,188,.3)}
+.grille tbody tr:last-child td{border-bottom:none}
+.grille tfoot td{
+  background:rgba(107,58,31,.04);padding:13px 14px;
+  font-weight:700;color:var(--ink);font-size:.85rem;
+}
+.stars{display:flex;gap:3px}
+.star{font-size:1.1rem;cursor:pointer;opacity:.2;transition:.15s;line-height:1}
+.star.lit{opacity:1}
+.pts-cell{text-align:center;font-weight:700;color:var(--caramel);font-size:.9rem}
+.total-pts{
+  font-family:'Cormorant Garamond',serif;font-size:1.6rem;
+  color:var(--gold);font-weight:700;
+}
+.level-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 14px;border-radius:50px;font-size:.75rem;font-weight:700;
+}
+.level-a{background:var(--ok-light);color:var(--ok)}
+.level-b{background:var(--warn-light);color:var(--warn)}
+.level-c{background:var(--ko-light);color:var(--ko)}
+
+/* ════════════════════════════════════════
+   NAVIGATION BUTTONS
+════════════════════════════════════════ */
+.part-nav-btns{
+  max-width:760px;margin:24px auto 0;padding:0 20px 40px;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+}
+.nav-btn{
+  padding:12px 28px;border-radius:50px;font-weight:700;font-size:.85rem;
+  cursor:pointer;font-family:'Jost',sans-serif;transition:.25s;letter-spacing:.04em;
+  display:inline-flex;align-items:center;gap:8px;border:none;
+}
+.btn-prev{background:rgba(107,58,31,.12);color:var(--bark)}
+.btn-prev:hover{background:rgba(107,58,31,.2)}
+.btn-next{background:var(--gold);color:var(--ink);box-shadow:0 4px 20px rgba(212,168,83,.35)}
+.btn-next:hover{transform:translateY(-1px);box-shadow:0 6px 26px rgba(212,168,83,.45)}
+.btn-submit{
+  background:linear-gradient(135deg,var(--caramel),var(--gold));
+  color:var(--ink);font-size:.95rem;padding:14px 36px;
+  box-shadow:0 6px 24px rgba(212,168,83,.4);
+}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(212,168,83,.5)}
+
+/* ════════════════════════════════════════
+   RESULTS PAGE
+════════════════════════════════════════ */
+.results-page{
+  background:linear-gradient(165deg,#1a0d05,#3d1c0a 60%,#6b3a1f 100%);
+  min-height:100vh;padding:60px 24px;display:none;
+}
+.results-page.show{display:block}
+.results-inner{max-width:760px;margin:0 auto}
+.results-header{text-align:center;margin-bottom:40px}
+.results-header h2{
+  font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.2rem);
+  color:var(--cream);margin-bottom:10px;
+}
+.big-score{
+  font-family:'Cormorant Garamond',serif;font-size:clamp(4rem,12vw,8rem);
+  color:var(--gold);line-height:1;font-weight:700;
+  text-shadow:0 0 60px rgba(212,168,83,.3);
+}
+.score-denom{font-size:1.5rem;color:rgba(212,168,83,.5)}
+.result-grade{
+  display:inline-block;margin-top:14px;padding:8px 24px;border-radius:50px;
+  font-weight:700;font-size:1rem;letter-spacing:.05em;
+}
+.grade-a{background:var(--ok-light);color:var(--ok)}
+.grade-b{background:var(--warn-light);color:var(--warn)}
+.grade-c{background:var(--ko-light);color:var(--ko)}
+.result-msg{font-size:.95rem;color:rgba(253,248,240,.6);margin-top:14px;line-height:1.7;font-weight:300}
+
+.results-breakdown{
+  background:rgba(253,248,240,.05);border:1px solid rgba(212,168,83,.15);
+  border-radius:var(--r-lg);padding:28px;margin-top:32px;
+}
+.results-breakdown h3{
+  font-family:'Cormorant Garamond',serif;color:var(--gold);
+  font-size:1.3rem;margin-bottom:20px;
+  border-bottom:1px solid rgba(212,168,83,.2);padding-bottom:12px;
+}
+.breakdown-row{
+  display:flex;align-items:center;gap:12px;margin-bottom:14px;
+  padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.05);
+}
+.breakdown-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.breakdown-name{flex:1;font-size:.88rem;color:rgba(253,248,240,.7);font-weight:500}
+.breakdown-bar{flex:1;height:8px;background:rgba(255,255,255,.08);border-radius:50px;overflow:hidden}
+.breakdown-fill{height:100%;border-radius:50px;background:linear-gradient(90deg,var(--caramel),var(--gold));transition:width 1s ease}
+.breakdown-score{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);white-space:nowrap;font-weight:700}
+
+.remarks-box{
+  background:rgba(253,248,240,.04);border:1px solid rgba(212,168,83,.12);
+  border-radius:var(--r);padding:22px;margin-top:20px;
+}
+.remarks-box h4{color:rgba(253,248,240,.6);font-size:.78rem;text-transform:uppercase;
+  letter-spacing:.1em;margin-bottom:12px;font-weight:700}
+.remarks-box p{color:rgba(253,248,240,.6);font-size:.87rem;line-height:1.7;font-weight:300}
+
+.restart-btn{
+  display:block;margin:36px auto 0;padding:14px 40px;
+  background:rgba(212,168,83,.15);color:var(--gold);border:1px solid rgba(212,168,83,.3);
+  border-radius:50px;font-family:'Jost',sans-serif;font-size:.9rem;font-weight:700;
+  cursor:pointer;transition:.25s;letter-spacing:.05em;
+}
+.restart-btn:hover{background:rgba(212,168,83,.25);transform:translateY(-2px)}
+
+/* ════════════════════════════════════════
+   UTILITY
+════════════════════════════════════════ */
+.sep{height:1px;background:var(--border);margin:20px 0}
+.info-note{
+  background:rgba(212,168,83,.08);border-left:3px solid var(--gold);
+  border-radius:0 var(--r-sm) var(--r-sm) 0;padding:12px 16px;
+  font-size:.82rem;color:var(--bark);line-height:1.6;margin-top:12px;
+}
+.tag{
+  display:inline-block;font-size:.68rem;font-weight:700;padding:2px 9px;
+  border-radius:50px;background:rgba(107,58,31,.1);color:var(--bark);
+  margin-right:4px;
+}
+@media(max-width:640px){
+  .part-hero-inner{flex-direction:column;gap:14px;text-align:center}
+  .part-pts{margin-left:0}
+  .match-wrap,.calc-row{grid-template-columns:1fr}
+}
+@media print{
+  body{background:#fff!important}
+  .cover,.exam-header,.part-nav,.exam-body,.restart-btn,
+  #dashboard,button{display:none!important}
+  .results-page{display:block!important;background:#fff!important;padding:20px!important}
+  .results-inner{max-width:100%!important}
+  .big-score{color:#3b1c08!important;font-size:3rem!important}
+  .results-breakdown{border:1px solid #ccc!important;background:#f9f9f9!important}
+  .breakdown-name,.breakdown-score{color:#333!important}
+  .breakdown-bar{background:#eee!important}
+  .breakdown-fill{background:#3b1c08!important}
+  .remarks-box{border:1px solid #ccc!important;background:#f9f9f9!important}
+  h2,h3,h4{color:#3b1c08!important}
+  #resultsEleve,p{color:#555!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     COVER
+════════════════════════════════════════ -->
+<div class="cover" id="cover">
+  <div class="cover-deco"></div>
+  <div class="cover-badge">✦ Évaluation Summative · CSVCA</div>
+  <div class="school-logo">🎓</div>
+  <h1>Le <em>Chocolat</em><br>en Vente Conseil</h1>
+  <p class="cover-subtitle">Lycée Professionnel François de Mahy · Le Tampon, La Réunion</p>
+  <div class="cover-meta">
+    <div class="cover-chip">📋 6 parties</div>
+    <div class="cover-chip">⏱ Durée : 60–75 min</div>
+    <div class="cover-chip">🏆 Total : 80 points</div>
+    <div class="cover-chip">📅 CSVCA · Spécialité Alimentation</div>
+  </div>
+  <!-- Formulaire identité élève -->
+  <div style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:400px;margin-bottom:28px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div>
+        <label style="display:block;font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(212,168,83,.6);margin-bottom:6px">Prénom</label>
+        <input id="eleve-prenom" type="text" placeholder="Ton prénom…"
+          style="width:100%;background:rgba(253,248,240,.08);border:1px solid rgba(212,168,83,.3);
+          border-radius:10px;padding:11px 16px;font-family:'Jost',sans-serif;font-size:.9rem;
+          color:var(--cream);outline:none;transition:.2s"
+          onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='rgba(212,168,83,.3)'">
+      </div>
+      <div>
+        <label style="display:block;font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(212,168,83,.6);margin-bottom:6px">Nom</label>
+        <input id="eleve-nom" type="text" placeholder="Ton nom…"
+          style="width:100%;background:rgba(253,248,240,.08);border:1px solid rgba(212,168,83,.3);
+          border-radius:10px;padding:11px 16px;font-family:'Jost',sans-serif;font-size:.9rem;
+          color:var(--cream);outline:none;transition:.2s"
+          onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='rgba(212,168,83,.3)'">
+      </div>
+    </div>
+    <div>
+      <label style="display:block;font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(212,168,83,.6);margin-bottom:6px">Classe</label>
+      <input id="eleve-classe" type="text" placeholder="Ex : CSVCA 1re…"
+        style="width:100%;background:rgba(253,248,240,.08);border:1px solid rgba(212,168,83,.3);
+        border-radius:10px;padding:11px 16px;font-family:'Jost',sans-serif;font-size:.9rem;
+        color:var(--cream);outline:none;transition:.2s"
+        onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='rgba(212,168,83,.3)'">
+    </div>
+    <div id="cover-error" style="display:none;color:#f8d7da;font-size:.8rem;padding:8px 14px;
+      background:rgba(139,26,26,.3);border-radius:8px;border:1px solid rgba(139,26,26,.4)">
+      ⚠️ Merci de renseigner ton prénom et ton nom avant de commencer.
+    </div>
+  </div>
+
+  <button class="start-btn" onclick="startExam()">🍫 Commencer l'évaluation</button>
+  <div class="part-pills">
+    <span class="part-pill">I. Connaissances 20pts</span>
+    <span class="part-pill">II. Assortiment 15pts</span>
+    <span class="part-pill">III. SONCASE 10pts</span>
+    <span class="part-pill">IV. Calcul prix 10pts</span>
+    <span class="part-pill">V. Argumentation 10pts</span>
+    <span class="part-pill">VI. Jeu de rôle 15pts</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     EXAM INTERFACE
+════════════════════════════════════════ -->
+<div id="examInterface" style="display:none">
+
+  <div class="exam-header">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-label" id="progressLabel">Partie 1/6</span>
+    <span id="headerEleve" style="font-size:.72rem;color:rgba(212,168,83,.55);white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis;font-weight:600;display:none"></span>
+    <span class="header-score" id="headerScore">0 / 80</span>
+  </div>
+
+  <nav class="part-nav" id="partNav">
+    <button class="part-btn active" onclick="goToPart(0,this)" id="pnav0">I · Connaissances</button>
+    <button class="part-btn" onclick="goToPart(1,this)" id="pnav1">II · Assortiment</button>
+    <button class="part-btn" onclick="goToPart(2,this)" id="pnav2">III · SONCASE</button>
+    <button class="part-btn" onclick="goToPart(3,this)" id="pnav3">IV · Calculs</button>
+    <button class="part-btn" onclick="goToPart(4,this)" id="pnav4">V · Argumentation</button>
+    <button class="part-btn" onclick="goToPart(5,this)" id="pnav5">VI · Jeu de rôle</button>
+  </nav>
+
+  <div class="exam-body">
+
+<!-- ╔══════════════════════════════════════╗
+     ║  PARTIE I — CONNAISSANCES (20 pts)  ║
+     ╚══════════════════════════════════════╝ -->
+<div class="part active" id="part0">
+  <div class="part-hero">
+    <div class="part-hero-inner">
+      <div class="part-number">I</div>
+      <div>
+        <h2>Connaissances du Chocolat</h2>
+        <p>Histoire, types, fabrication, réglementation. Réponds à chaque question avec soin.</p>
+      </div>
+      <div class="part-pts"><div class="num">20</div><div class="lbl">points</div></div>
+    </div>
+  </div>
+
+  <div class="questions">
+
+    <!-- Q1 MCQ -->
+    <div class="q-block" id="qb1">
+      <div class="q-header">
+        <div class="q-num">1</div>
+        <div class="q-text">Qui a inventé la <strong>praline belge</strong> (chocolat fourré) et en quelle année ?</div>
+        <div class="q-pts">2 pts</div>
+      </div>
+      <div class="q-body">
+        <div class="mcq-opts" data-q="q1" data-answer="2">
+          <div class="mcq-opt" onclick="selectMcq(this,'q1')"><div class="mcq-radio"><div class="mcq-dot"></div></div>Leonidas Kestekides, en 1913</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q1')"><div class="mcq-radio"><div class="mcq-dot"></div></div>Rodolphe Lindt, en 1879</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q1')"><div class="mcq-radio"><div class="mcq-dot"></div></div>Jean Neuhaus Jr., en 1912</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q1')"><div class="mcq-radio"><div class="mcq-dot"></div></div>Louise Agostini, en 1915</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2 MCQ -->
+    <div class="q-block" id="qb2">
+      <div class="q-header">
+        <div class="q-num">2</div>
+        <div class="q-text">Quelle est la teneur minimale en cacao pour qu'une tablette soit appelée <strong>«chocolat noir»</strong> en Europe ?</div>
+        <div class="q-pts">2 pts</div>
+      </div>
+      <div class="q-body">
+        <div class="mcq-opts" data-q="q2" data-answer="1">
+          <div class="mcq-opt" onclick="selectMcq(this,'q2')"><div class="mcq-radio"><div class="mcq-dot"></div></div>25%</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q2')"><div class="mcq-radio"><div class="mcq-dot"></div></div>43%</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q2')"><div class="mcq-radio"><div class="mcq-dot"></div></div>70%</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q2')"><div class="mcq-radio"><div class="mcq-dot"></div></div>55%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3 MCQ -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">3</div>
+        <div class="q-text">Quelle technique inventée par Rodolphe Lindt en 1879 donne au chocolat sa texture lisse et fondante ?</div>
+        <div class="q-pts">2 pts</div>
+      </div>
+      <div class="q-body">
+        <div class="mcq-opts" data-q="q3" data-answer="0">
+          <div class="mcq-opt" onclick="selectMcq(this,'q3')"><div class="mcq-radio"><div class="mcq-dot"></div></div>Le conchage</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q3')"><div class="mcq-radio"><div class="mcq-dot"></div></div>Le tempérage</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q3')"><div class="mcq-radio"><div class="mcq-dot"></div></div>La fermentation</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q3')"><div class="mcq-radio"><div class="mcq-dot"></div></div>La torréfaction</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4 VRAI/FAUX -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">4</div>
+        <div class="q-text">Vrai ou Faux ? — <em>«Le chocolat blanc contient de la pâte de cacao comme le chocolat noir et le chocolat au lait.»</em></div>
+        <div class="q-pts">1 pt</div>
+      </div>
+      <div class="q-body">
+        <div class="tf-row">
+          <button class="tf-btn" data-q="q4" data-val="vrai" onclick="selectTf(this,'q4','faux')">✓ Vrai</button>
+          <button class="tf-btn" data-q="q4" data-val="faux" onclick="selectTf(this,'q4','faux')">✗ Faux</button>
+        </div>
+        <div class="q-feedback" id="fb-q4"></div>
+      </div>
+    </div>
+
+    <!-- Q5 VRAI/FAUX -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">5</div>
+        <div class="q-text">Vrai ou Faux ? — <em>«En France, 30% des consommateurs préfèrent le chocolat noir, contre seulement 5% en moyenne dans le reste de l'Europe.»</em></div>
+        <div class="q-pts">1 pt</div>
+      </div>
+      <div class="q-body">
+        <div class="tf-row">
+          <button class="tf-btn" data-q="q5" data-val="vrai" onclick="selectTf(this,'q5','vrai')">✓ Vrai</button>
+          <button class="tf-btn" data-q="q5" data-val="faux" onclick="selectTf(this,'q5','vrai')">✗ Faux</button>
+        </div>
+        <div class="q-feedback" id="fb-q5"></div>
+      </div>
+    </div>
+
+    <!-- Q6 ORDRE FABRICATION -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">6</div>
+        <div class="q-text">Numérote de <strong>1 à 5</strong> les étapes de fabrication du chocolat dans le bon ordre chronologique.</div>
+        <div class="q-pts">4 pts</div>
+      </div>
+      <div class="q-body">
+        <div class="info-note">Écris le numéro de l'étape (1 = première, 5 = dernière) dans chaque case.</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px" id="ordreQ6">
+          <div style="display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--parchment);border-radius:var(--r-sm)">
+            <input type="number" min="1" max="5" class="fill-input" style="width:70px;text-align:center" data-step="torréfaction" placeholder="#">
+            <span style="font-size:.87rem;color:#444">🔥 Torréfaction des fèves</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--parchment);border-radius:var(--r-sm)">
+            <input type="number" min="1" max="5" class="fill-input" style="width:70px;text-align:center" data-step="tempérage" placeholder="#">
+            <span style="font-size:.87rem;color:#444">🌡️ Tempérage</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--parchment);border-radius:var(--r-sm)">
+            <input type="number" min="1" max="5" class="fill-input" style="width:70px;text-align:center" data-step="fermentation" placeholder="#">
+            <span style="font-size:.87rem;color:#444">🫙 Fermentation</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--parchment);border-radius:var(--r-sm)">
+            <input type="number" min="1" max="5" class="fill-input" style="width:70px;text-align:center" data-step="conchage" placeholder="#">
+            <span style="font-size:.87rem;color:#444">🌊 Conchage</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--parchment);border-radius:var(--r-sm)">
+            <input type="number" min="1" max="5" class="fill-input" style="width:70px;text-align:center" data-step="moulage" placeholder="#">
+            <span style="font-size:.87rem;color:#444">🍬 Moulage & garnissage</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q7 FILL -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">7</div>
+        <div class="q-text">Complète la phrase : <em>«Le <strong>_______</strong> est l'emballage emblématique inventé par Louise Agostini (Neuhaus) en 1915 pour transporter les pralines sans les abîmer.»</em></div>
+        <div class="q-pts">1 pt</div>
+      </div>
+      <div class="q-body">
+        <div class="gap-wrap">
+          <input class="fill-input" id="fq7" placeholder="Votre réponse…">
+        </div>
+      </div>
+    </div>
+
+    <!-- Q8 MCQ marché -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">8</div>
+        <div class="q-text">En France, quelle est la part de marché en <strong>volume</strong> des <strong>tablettes de chocolat</strong> en GMS en 2024 ?</div>
+        <div class="q-pts">2 pts</div>
+      </div>
+      <div class="q-body">
+        <div class="mcq-opts" data-q="q8" data-answer="2">
+          <div class="mcq-opt" onclick="selectMcq(this,'q8')"><div class="mcq-radio"><div class="mcq-dot"></div></div>24,3%</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q8')"><div class="mcq-radio"><div class="mcq-dot"></div></div>29,3%</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q8')"><div class="mcq-radio"><div class="mcq-dot"></div></div>34,3%</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q8')"><div class="mcq-radio"><div class="mcq-dot"></div></div>44,3%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q9 MCQ saison -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">9</div>
+        <div class="q-text">Quelle période représente le plus grand temps fort des ventes de chocolat en France ?</div>
+        <div class="q-pts">1 pt</div>
+      </div>
+      <div class="q-body">
+        <div class="mcq-opts" data-q="q9" data-answer="2">
+          <div class="mcq-opt" onclick="selectMcq(this,'q9')"><div class="mcq-radio"><div class="mcq-dot"></div></div>La Saint-Valentin</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q9')"><div class="mcq-radio"><div class="mcq-dot"></div></div>Pâques</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q9')"><div class="mcq-radio"><div class="mcq-dot"></div></div>Noël</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q9')"><div class="mcq-radio"><div class="mcq-dot"></div></div>La rentrée scolaire</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q10 FILL variété -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">10</div>
+        <div class="q-text">Citez les <strong>deux variétés de fèves de cacao nobles</strong> (à arômes fins) utilisées par Lindt dans ses chocolats Grand Cru (opposées au Forastero).</div>
+        <div class="q-pts">2 pts</div>
+      </div>
+      <div class="q-body">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+          <input class="fill-input" id="fq10a" placeholder="Variété 1…" style="flex:1;min-width:150px">
+          <input class="fill-input" id="fq10b" placeholder="Variété 2…" style="flex:1;min-width:150px">
+        </div>
+      </div>
+    </div>
+
+    <!-- Q11 FILL label -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">11</div>
+        <div class="q-text">Quel <strong>label protégé</strong> garantit qu'un chocolat est fabriqué en Belgique avec du beurre de cacao pur, sans graisses végétales de substitution ?</div>
+        <div class="q-pts">2 pts</div>
+      </div>
+      <div class="q-body">
+        <input class="fill-input" id="fq11" placeholder="Nom du label…" style="margin-top:8px">
+      </div>
+    </div>
+
+  </div><!-- /questions -->
+
+  <div class="part-nav-btns">
+    <div></div>
+    <button class="nav-btn btn-next" onclick="goToPart(1)">Partie II — Assortiment →</button>
+  </div>
+</div><!-- /part0 -->
+
+
+<!-- ╔══════════════════════════════════════╗
+     ║  PARTIE II — ASSORTIMENT (15 pts)   ║
+     ╚══════════════════════════════════════╝ -->
+<div class="part" id="part1">
+  <div class="part-hero">
+    <div class="part-hero-inner">
+      <div class="part-number">II</div>
+      <div>
+        <h2>Connaissance de l'Assortiment</h2>
+        <p>Marques, gammes, garnitures et positionnement produit.</p>
+      </div>
+      <div class="part-pts"><div class="num">15</div><div class="lbl">points</div></div>
+    </div>
+  </div>
+  <div class="questions">
+
+    <!-- Q12 MATCHING marques -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">12</div>
+        <div class="q-text">Associe chaque <strong>marque</strong> à sa <strong>description</strong> caractéristique. Clique sur une marque, puis sur la description correspondante.</div>
+        <div class="q-pts">5 pts</div>
+      </div>
+      <div class="q-body">
+        <div class="match-wrap" id="matchQ12">
+          <div class="match-col">
+            <h5>Marques</h5>
+            <div class="match-item" data-id="A" onclick="matchSel(this,'term','matchQ12')">🥇 Neuhaus</div>
+            <div class="match-item" data-id="B" onclick="matchSel(this,'term','matchQ12')">🦁 Leonidas</div>
+            <div class="match-item" data-id="C" onclick="matchSel(this,'term','matchQ12')">🔴 Lindt</div>
+            <div class="match-item" data-id="D" onclick="matchSel(this,'term','matchQ12')">🌿 Élisabeth</div>
+            <div class="match-item" data-id="E" onclick="matchSel(this,'term','matchQ12')">💜 Passions Chocolat</div>
+          </div>
+          <div class="match-col">
+            <h5>Description</h5>
+            <div class="match-item match-def" data-id="C" onclick="matchSel(this,'def','matchQ12')">Inventeur du conchage (1879), leader mondial haut de gamme, tablettes Excellence 70–99% cacao</div>
+            <div class="match-item match-def" data-id="A" onclick="matchSel(this,'def','matchQ12')">Inventeur de la praline belge (1912) et du ballotin (1915), fournisseur de la Cour de Belgique</div>
+            <div class="match-item match-def" data-id="E" onclick="matchSel(this,'def','matchQ12')">Artisanal bruxellois, créatif, spécialiste des saveurs exotiques et des éditions limitées</div>
+            <div class="match-item match-def" data-id="B" onclick="matchSel(this,'def','matchQ12')">Fondée en 1913, qualité accessible, Manon emblématique, 1 030 boutiques dans 32 pays</div>
+            <div class="match-item match-def" data-id="D" onclick="matchSel(this,'def','matchQ12')">Boutique indépendante (2002) sélectionnant les meilleurs artisans belges dont Frédéric Blondeel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q13 MCQ garnitures -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">13</div>
+        <div class="q-text">Qu'est-ce que la <strong>ganache</strong> en chocolaterie ?</div>
+        <div class="q-pts">2 pts</div>
+      </div>
+      <div class="q-body">
+        <div class="mcq-opts" data-q="q13" data-answer="1">
+          <div class="mcq-opt" onclick="selectMcq(this,'q13')"><div class="mcq-radio"><div class="mcq-dot"></div></div>Une pâte de noisettes et d'amandes caramélisées broyées</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q13')"><div class="mcq-radio"><div class="mcq-dot"></div></div>Un mélange émulsionné de crème fraîche et de chocolat fondu</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q13')"><div class="mcq-radio"><div class="mcq-dot"></div></div>Une pâte de noisettes du Piémont et de chocolat</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q13')"><div class="mcq-radio"><div class="mcq-dot"></div></div>Un caramel à la fleur de sel</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q14 MCQ gianduja -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">14</div>
+        <div class="q-text">Le <strong>gianduja</strong> est une garniture de chocolaterie à base de :</div>
+        <div class="q-pts">2 pts</div>
+      </div>
+      <div class="q-body">
+        <div class="mcq-opts" data-q="q14" data-answer="2">
+          <div class="mcq-opt" onclick="selectMcq(this,'q14')"><div class="mcq-radio"><div class="mcq-dot"></div></div>Crème fraîche et beurre de cacao</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q14')"><div class="mcq-radio"><div class="mcq-dot"></div></div>Amandes de Californie et chocolat blanc</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q14')"><div class="mcq-radio"><div class="mcq-dot"></div></div>Noisettes du Piémont et chocolat — texture veloutée et onctueuse</div>
+          <div class="mcq-opt" onclick="selectMcq(this,'q14')"><div class="mcq-radio"><div class="mcq-dot"></div></div>Sirop de liqueur et sucre cristallisé</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q15 COURT -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">15</div>
+        <div class="q-text">Cite <strong>3 garnitures différentes</strong> que l'on trouve dans les pralines belges et donne une courte définition pour chacune.</div>
+        <div class="q-pts">3 pts</div>
+      </div>
+      <div class="q-body">
+        <textarea class="exam-textarea" id="tq15" placeholder="Garniture 1 : … → définition&#10;Garniture 2 : … → définition&#10;Garniture 3 : … → définition"></textarea>
+      </div>
+    </div>
+
+    <!-- Q16 positionnement -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">16</div>
+        <div class="q-text">Un client cherche du chocolat <strong>à offrir en cadeau d'affaires, budget 80–100€</strong>. Quelle(s) marque(s) de l'assortiment lui recommanderais-tu et pourquoi ? (3–5 lignes)</div>
+        <div class="q-pts">3 pts</div>
+      </div>
+      <div class="q-body">
+        <textarea class="exam-textarea" id="tq16" placeholder="Je recommanderais… car…"></textarea>
+      </div>
+    </div>
+
+  </div>
+  <div class="part-nav-btns">
+    <button class="nav-btn btn-prev" onclick="goToPart(0)">← Partie I</button>
+    <button class="nav-btn btn-next" onclick="goToPart(2)">Partie III — SONCASE →</button>
+  </div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════╗
+     ║  PARTIE III — SONCASE (10 pts)      ║
+     ╚══════════════════════════════════════╝ -->
+<div class="part" id="part2">
+  <div class="part-hero">
+    <div class="part-hero-inner">
+      <div class="part-number">III</div>
+      <div>
+        <h2>Méthode SONCASE</h2>
+        <p>Identifier le profil client et choisir les bons arguments de vente.</p>
+      </div>
+      <div class="part-pts"><div class="num">10</div><div class="lbl">points</div></div>
+    </div>
+  </div>
+  <div class="questions">
+
+    <!-- Q17 définition SONCASE -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">17</div>
+        <div class="q-text">Pour chaque lettre de <strong>SONCASE</strong>, écris ce qu'elle représente et donne un exemple d'argument chocolat.</div>
+        <div class="q-pts">4 pts</div>
+      </div>
+      <div class="q-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+          <div style="background:var(--parchment);padding:10px 14px;border-radius:var(--r-sm)">
+            <div style="font-size:.7rem;font-weight:700;color:var(--caramel);margin-bottom:4px">S</div>
+            <input class="fill-input" id="sonS" placeholder="S signifie… / Argument…" style="font-size:.8rem">
+          </div>
+          <div style="background:var(--parchment);padding:10px 14px;border-radius:var(--r-sm)">
+            <div style="font-size:.7rem;font-weight:700;color:var(--caramel);margin-bottom:4px">O</div>
+            <input class="fill-input" id="sonO" placeholder="O signifie… / Argument…" style="font-size:.8rem">
+          </div>
+          <div style="background:var(--parchment);padding:10px 14px;border-radius:var(--r-sm)">
+            <div style="font-size:.7rem;font-weight:700;color:var(--caramel);margin-bottom:4px">N</div>
+            <input class="fill-input" id="sonN" placeholder="N signifie… / Argument…" style="font-size:.8rem">
+          </div>
+          <div style="background:var(--parchment);padding:10px 14px;border-radius:var(--r-sm)">
+            <div style="font-size:.7rem;font-weight:700;color:var(--caramel);margin-bottom:4px">C</div>
+            <input class="fill-input" id="sonC" placeholder="C signifie… / Argument…" style="font-size:.8rem">
+          </div>
+          <div style="background:var(--parchment);padding:10px 14px;border-radius:var(--r-sm)">
+            <div style="font-size:.7rem;font-weight:700;color:var(--caramel);margin-bottom:4px">A</div>
+            <input class="fill-input" id="sonA" placeholder="A signifie… / Argument…" style="font-size:.8rem">
+          </div>
+          <div style="background:var(--parchment);padding:10px 14px;border-radius:var(--r-sm)">
+            <div style="font-size:.7rem;font-weight:700;color:var(--caramel);margin-bottom:4px">S₂</div>
+            <input class="fill-input" id="sonS2" placeholder="S signifie… / Argument…" style="font-size:.8rem">
+          </div>
+          <div style="background:var(--parchment);padding:10px 14px;border-radius:var(--r-sm);grid-column:1/-1">
+            <div style="font-size:.7rem;font-weight:700;color:var(--caramel);margin-bottom:4px">E</div>
+            <input class="fill-input" id="sonE" placeholder="E signifie… / Argument…" style="font-size:.8rem">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q18 identifier profil -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">18</div>
+        <div class="q-text">Lis les phrases des clients ci-dessous. <strong>Identifie la lettre SONCASE</strong> dominante pour chacun.</div>
+        <div class="q-pts">3 pts</div>
+      </div>
+      <div class="q-body">
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:6px">
+          <div style="background:var(--parchment);border-radius:var(--r-sm);padding:14px">
+            <p style="font-size:.85rem;color:#444;font-style:italic;margin-bottom:8px">«Est-ce que votre chocolat contient des allergènes ? Je dois être sûre qu'il n'y a pas de noisettes.»</p>
+            <select class="fill-input" id="son18a" style="width:auto">
+              <option value="">-- Choisir --</option>
+              <option>S — Sécurité</option>
+              <option>O — Orgueil</option>
+              <option>N — Nouveauté</option>
+              <option>C — Confort</option>
+              <option>A — Argent</option>
+              <option>S₂ — Sympathie</option>
+              <option>E — Environnement</option>
+            </select>
+          </div>
+          <div style="background:var(--parchment);border-radius:var(--r-sm);padding:14px">
+            <p style="font-size:.85rem;color:#444;font-style:italic;margin-bottom:8px">«J'aimerais offrir quelque chose de vraiment exclusif, que tout le monde ne peut pas s'offrir.»</p>
+            <select class="fill-input" id="son18b" style="width:auto">
+              <option value="">-- Choisir --</option>
+              <option>S — Sécurité</option>
+              <option>O — Orgueil</option>
+              <option>N — Nouveauté</option>
+              <option>C — Confort</option>
+              <option>A — Argent</option>
+              <option>S₂ — Sympathie</option>
+              <option>E — Environnement</option>
+            </select>
+          </div>
+          <div style="background:var(--parchment);border-radius:var(--r-sm);padding:14px">
+            <p style="font-size:.85rem;color:#444;font-style:italic;margin-bottom:8px">«Je veux un chocolat dont je suis sûre que les producteurs de cacao sont payés équitablement.»</p>
+            <select class="fill-input" id="son18c" style="width:auto">
+              <option value="">-- Choisir --</option>
+              <option>S — Sécurité</option>
+              <option>O — Orgueil</option>
+              <option>N — Nouveauté</option>
+              <option>C — Confort</option>
+              <option>A — Argent</option>
+              <option>S₂ — Sympathie</option>
+              <option>E — Environnement</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q19 adapter argument -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">19</div>
+        <div class="q-text">Un client vous dit : <em>«Je cherche quelque chose de pas trop cher mais de qualité pour offrir à ma collègue.»</em> Quelle est sa dominante SONCASE et quel argument précis lui proposes-tu ? (4–6 lignes)</div>
+        <div class="q-pts">3 pts</div>
+      </div>
+      <div class="q-body">
+        <textarea class="exam-textarea" id="tq19" placeholder="Dominante SONCASE : …&#10;&#10;Mon argument : …"></textarea>
+      </div>
+    </div>
+
+  </div>
+  <div class="part-nav-btns">
+    <button class="nav-btn btn-prev" onclick="goToPart(1)">← Partie II</button>
+    <button class="nav-btn btn-next" onclick="goToPart(3)">Partie IV — Calculs →</button>
+  </div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════╗
+     ║  PARTIE IV — CALCULS PRIX (10 pts)  ║
+     ╚══════════════════════════════════════╝ -->
+<div class="part" id="part3">
+  <div class="part-hero">
+    <div class="part-hero-inner">
+      <div class="part-number">IV</div>
+      <div>
+        <h2>Calcul du Prix</h2>
+        <p>Prix au kilo, remise, TVA, marge. Montre ton raisonnement.</p>
+      </div>
+      <div class="part-pts"><div class="num">10</div><div class="lbl">points</div></div>
+    </div>
+  </div>
+  <div class="questions">
+
+    <!-- Q20 prix au kilo -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">20</div>
+        <div class="q-text">Un ballotin Neuhaus de <strong>500g est vendu 42€</strong>. <br>a) Quel est son prix au kilo ?<br>b) Combien coûte une sélection de <strong>150g</strong> ?</div>
+        <div class="q-pts">2 pts</div>
+      </div>
+      <div class="q-body">
+        <div class="calc-row">
+          <div class="calc-field">
+            <label>a) Prix au kilo (€/kg)</label>
+            <input type="number" id="cq20a" step="0.01" placeholder="= ?">
+          </div>
+          <div class="calc-field">
+            <label>b) Prix pour 150g (€)</label>
+            <input type="number" id="cq20b" step="0.01" placeholder="= ?">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q21 remise -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">21</div>
+        <div class="q-text">Un client commande <strong>10 coffrets à 45€</strong> chacun. Le magasin accorde une remise de <strong>12%</strong>.<br>a) Quel est le montant de la remise par coffret ?<br>b) Quel est le total à payer pour les 10 coffrets ?</div>
+        <div class="q-pts">2 pts</div>
+      </div>
+      <div class="q-body">
+        <div class="calc-row">
+          <div class="calc-field">
+            <label>a) Remise par coffret (€)</label>
+            <input type="number" id="cq21a" step="0.01" placeholder="= ?">
+          </div>
+          <div class="calc-field">
+            <label>b) Total à payer (€)</label>
+            <input type="number" id="cq21b" step="0.01" placeholder="= ?">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q22 TVA -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">22</div>
+        <div class="q-text">Un chocolatier vend une tablette <strong>3,20€ HT</strong>. La TVA sur le chocolat en France est de <strong>5,5%</strong>. Quel est le <strong>prix TTC</strong> à afficher en rayon ?</div>
+        <div class="q-pts">2 pts</div>
+      </div>
+      <div class="q-body">
+        <div class="calc-row">
+          <div class="calc-field">
+            <label>Montant TVA (€)</label>
+            <input type="number" id="cq22a" step="0.01" placeholder="= ?">
+          </div>
+          <div class="calc-field">
+            <label>Prix TTC (€)</label>
+            <input type="number" id="cq22b" step="0.01" placeholder="= ?">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q23 marge -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">23</div>
+        <div class="q-text">Un ballotin est acheté <strong>8€ HT</strong> et vendu <strong>19,90€ TTC</strong> (TVA 5,5%).<br>a) Calculez le PV HT<br>b) La marge brute en €<br>c) Le taux de marge en %</div>
+        <div class="q-pts">4 pts</div>
+      </div>
+      <div class="q-body">
+        <div class="calc-row">
+          <div class="calc-field">
+            <label>a) PV HT (€)</label>
+            <input type="number" id="cq23a" step="0.01" placeholder="= ?">
+          </div>
+          <div class="calc-field">
+            <label>b) Marge brute (€)</label>
+            <input type="number" id="cq23b" step="0.01" placeholder="= ?">
+          </div>
+          <div class="calc-field">
+            <label>c) Taux de marge (%)</label>
+            <input type="number" id="cq23c" step="0.01" placeholder="= ?">
+          </div>
+        </div>
+        <div class="info-note" style="margin-top:12px">Rappel : Taux de marge = (PV HT – PA HT) / PA HT × 100</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="part-nav-btns">
+    <button class="nav-btn btn-prev" onclick="goToPart(2)">← Partie III</button>
+    <button class="nav-btn btn-next" onclick="goToPart(4)">Partie V — Argumentation →</button>
+  </div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════╗
+     ║  PARTIE V — ARGUMENTATION (10 pts)      ║
+     ╚══════════════════════════════════════════╝ -->
+<div class="part" id="part4">
+  <div class="part-hero">
+    <div class="part-hero-inner">
+      <div class="part-number">V</div>
+      <div>
+        <h2>Argumentation Produit</h2>
+        <p>Répondre précisément aux besoins, construire un argumentaire CAP-SONCASE.</p>
+      </div>
+      <div class="part-pts"><div class="num">10</div><div class="lbl">points</div></div>
+    </div>
+  </div>
+  <div class="questions">
+
+    <!-- Q24 CAP -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">24</div>
+        <div class="q-text">Construis un argumentaire <strong>CAP</strong> (Caractéristique → Avantage → Preuve) pour le produit suivant : <br><em>«Ballotin Neuhaus Classic 500g — ganache chocolat noir Pérou 64%, fabriqué en Belgique, sans huile de palme, fournisseur de la Cour de Belgique»</em></div>
+        <div class="q-pts">3 pts</div>
+      </div>
+      <div class="q-body">
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
+          <div style="background:var(--parchment);border-radius:var(--r-sm);padding:12px 16px">
+            <div style="font-size:.7rem;font-weight:700;color:var(--caramel);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em">C — Caractéristique</div>
+            <textarea class="exam-textarea" id="capC" style="min-height:60px" placeholder="Quelle caractéristique concrète du produit ?"></textarea>
+          </div>
+          <div style="background:var(--parchment);border-radius:var(--r-sm);padding:12px 16px">
+            <div style="font-size:.7rem;font-weight:700;color:var(--ok);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em">A — Avantage pour le client</div>
+            <textarea class="exam-textarea" id="capA" style="min-height:60px" placeholder="Qu'est-ce que ça apporte concrètement au client ?"></textarea>
+          </div>
+          <div style="background:var(--parchment);border-radius:var(--r-sm);padding:12px 16px">
+            <div style="font-size:.7rem;font-weight:700;color:var(--bark);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em">P — Preuve / référence</div>
+            <textarea class="exam-textarea" id="capP" style="min-height:60px" placeholder="Quelle preuve, certification ou référence conforte cet argument ?"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q25 objection -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">25</div>
+        <div class="q-text">Un client dit : <em>«C'est beaucoup trop cher pour du chocolat, j'en trouve à moitié prix au supermarché.»</em><br>Comment réponds-tu à cette objection ? (5–7 lignes)</div>
+        <div class="q-pts">4 pts</div>
+      </div>
+      <div class="q-body">
+        <textarea class="exam-textarea" id="tq25" placeholder="Je comprends votre remarque… [reformuler l'objection]&#10;Cependant… [argument de valeur]&#10;En effet… [preuve]&#10;Alors… [proposition concrète]"></textarea>
+      </div>
+    </div>
+
+    <!-- Q26 vente add -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">26</div>
+        <div class="q-text">Un client vient d'acheter un ballotin Neuhaus pour offrir. Propose-lui une <strong>vente additionnelle pertinente</strong> en 2–3 phrases et explique pourquoi c'est pertinent pour ce client.</div>
+        <div class="q-pts">3 pts</div>
+      </div>
+      <div class="q-body">
+        <textarea class="exam-textarea" id="tq26" placeholder="Je vous propose également…&#10;Car…&#10;Cela compléterait parfaitement…"></textarea>
+      </div>
+    </div>
+
+  </div>
+  <div class="part-nav-btns">
+    <button class="nav-btn btn-prev" onclick="goToPart(3)">← Partie IV</button>
+    <button class="nav-btn btn-next" onclick="goToPart(5)">Partie VI — Jeu de rôle →</button>
+  </div>
+</div>
+
+
+<!-- ╔════════════════════════════════════════════╗
+     ║  PARTIE VI — JEU DE RÔLE (15 pts)        ║
+     ╚════════════════════════════════════════════╝ -->
+<div class="part" id="part5">
+  <div class="part-hero">
+    <div class="part-hero-inner">
+      <div class="part-number">VI</div>
+      <div>
+        <h2>Simulation de Vente</h2>
+        <p>Mise en situation complète avec grille d'évaluation détaillée.</p>
+      </div>
+      <div class="part-pts"><div class="num">15</div><div class="lbl">points</div></div>
+    </div>
+  </div>
+  <div class="questions">
+
+    <div class="info-note" style="margin-bottom:20px">
+      📌 <strong>Consigne :</strong> Choisis UN des deux clients ci-dessous. Rédige le dialogue complet d'une situation de vente (accueil → découverte des besoins → argumentation → réponse aux objections → conclusion → vente additionnelle → prise de congé). Minimum 10 répliques. Évalue ensuite ta propre prestation avec la grille.
+    </div>
+
+    <!-- Choix client -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">A</div>
+        <div class="q-text"><strong>Choisis ton client pour la simulation</strong></div>
+        <div class="q-pts">—</div>
+      </div>
+      <div class="q-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px">
+          <div class="client-card" id="clientA" onclick="selectClient('A')" style="cursor:pointer;border:2px solid var(--border);transition:.2s">
+            <div class="client-avatar">👩‍💼</div>
+            <div class="client-info">
+              <h4>Cliente A — Mme Fontaine</h4>
+              <p style="font-size:.8rem;color:#666;line-height:1.5">Directrice d'école, 52 ans. Veut remercier ses 8 enseignants avec un cadeau original de chocolat. Budget total : 120€. Elle valorise la qualité artisanale et le made in Belgium. Allergique au gluten.</p>
+              <div class="tags">
+                <span class="client-tag">Budget 120€</span>
+                <span class="client-tag">Collectif ×8</span>
+                <span class="client-tag">Allergie gluten</span>
+                <span class="client-tag">SONCASE : S + O</span>
+              </div>
+            </div>
+          </div>
+          <div class="client-card" id="clientB" onclick="selectClient('B')" style="cursor:pointer;border:2px solid var(--border);transition:.2s">
+            <div class="client-avatar">🧑‍🎒</div>
+            <div class="client-info">
+              <h4>Client B — Lucas</h4>
+              <p style="font-size:.8rem;color:#666;line-height:1.5">Étudiant, 20 ans, en visite à Bruxelles. Veut rapporter du chocolat typiquement belge pour sa famille à La Réunion. Budget serré : 25€ max. Famille de 5 personnes, dont 2 enfants. Veut quelque chose de coloré et varié.</p>
+              <div class="tags">
+                <span class="client-tag">Budget 25€</span>
+                <span class="client-tag">Famille ×5</span>
+                <span class="client-tag">Souvenir belge</span>
+                <span class="client-tag">SONCASE : A + N</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" id="clientChoice" value="">
+      </div>
+    </div>
+
+    <!-- Dialogue -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">B</div>
+        <div class="q-text"><strong>Rédige le dialogue complet</strong> de la situation de vente (accueil jusqu'à la prise de congé)</div>
+        <div class="q-pts">—</div>
+      </div>
+      <div class="q-body">
+        <div class="info-note" style="margin-bottom:12px">Structure attendue : Accueil → Découverte des besoins → Reformulation → Proposition produit (CAP) → Réponse aux objections → Conclusion → Vente additionnelle → Prise de congé</div>
+        <textarea class="exam-textarea" id="dialogueRP" style="min-height:300px"
+          placeholder="VENDEUR : Bonjour Madame/Monsieur, bienvenue chez [marque] !&#10;&#10;CLIENT : [phrase du client]&#10;&#10;VENDEUR : …&#10;&#10;CLIENT : …&#10;&#10;Continuer le dialogue jusqu'à la conclusion de la vente et la prise de congé."></textarea>
+      </div>
+    </div>
+
+    <!-- GRILLE AUTO-ÉVALUATION -->
+    <div class="q-block">
+      <div class="q-header">
+        <div class="q-num">C</div>
+        <div class="q-text"><strong>Grille d'évaluation</strong> — Note ta prestation de 1 à 3 étoiles pour chaque critère</div>
+        <div class="q-pts">15 pts</div>
+      </div>
+      <div class="q-body">
+        <div class="grille-wrap" style="margin-top:12px">
+          <table class="grille" id="grilleEval">
+            <thead>
+              <tr>
+                <th style="width:5%">#</th>
+                <th style="width:28%">Critère</th>
+                <th style="width:30%">Ce qu'on attend</th>
+                <th style="width:27%">Indicateurs de réussite</th>
+                <th style="width:10%;text-align:center">⭐ Note</th>
+              </tr>
+            </thead>
+            <tbody id="grilleBody">
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3" style="font-weight:700;color:var(--ink);font-size:.88rem">TOTAL PARTIE VI</td>
+                <td><span class="level-badge" id="levelBadge">—</span></td>
+                <td class="pts-cell"><span class="total-pts" id="totalGrille">0</span><span style="font-size:.7rem;color:#999">/15</span></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <!-- Commentaire prof -->
+        <div style="margin-top:20px">
+          <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#999;margin-bottom:8px">💬 Commentaire / Points à améliorer</div>
+          <textarea class="exam-textarea" id="commentRP" style="min-height:80px" placeholder="Ce que j'ai bien réussi : …&#10;Ce que je dois améliorer : …"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="part-nav-btns">
+    <button class="nav-btn btn-prev" onclick="goToPart(4)">← Partie V</button>
+    <button class="nav-btn btn-submit" onclick="submitExam()">🏆 Terminer &amp; voir mes résultats</button>
+  </div>
+</div>
+
+  </div><!-- /exam-body -->
+</div><!-- /examInterface -->
+
+
+<!-- ════════════════════════════════════════
+     RESULTS PAGE
+════════════════════════════════════════ -->
+<div class="results-page" id="resultsPage">
+  <div class="results-inner">
+    <div class="results-header">
+      <h2>🏆 Résultats de l'Évaluation</h2>
+      <div id="resultsEleve" style="font-size:.85rem;color:rgba(212,168,83,.6);margin-bottom:10px;letter-spacing:.05em;font-weight:500"></div>
+      <div class="big-score" id="bigScore">—<span class="score-denom">/80</span></div>
+      <div class="result-grade" id="resultGrade">—</div>
+      <p class="result-msg" id="resultMsg"></p>
+      <!-- Boutons export -->
+      <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:28px">
+        <button onclick="printResult()" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:rgba(253,248,240,.1);border:1px solid rgba(212,168,83,.3);border-radius:50px;color:var(--gold);font-family:'Jost',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:.2s;letter-spacing:.04em" onmouseover="this.style.background='rgba(212,168,83,.18)'" onmouseout="this.style.background='rgba(253,248,240,.1)'">
+          🖨️ Imprimer ma fiche résultat
+        </button>
+        <button onclick="saveToStorage()" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:rgba(45,106,79,.2);border:1px solid rgba(45,106,79,.4);border-radius:50px;color:#6fcf97;font-family:'Jost',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:.2s;letter-spacing:.04em" id="saveBtn" onmouseover="this.style.background='rgba(45,106,79,.35)'" onmouseout="this.style.background='rgba(45,106,79,.2)'">
+          💾 Enregistrer mon résultat
+        </button>
+      </div>
+      <div id="saveConfirm" style="display:none;margin-top:12px;font-size:.8rem;color:#6fcf97;padding:8px 18px;background:rgba(45,106,79,.15);border-radius:50px;border:1px solid rgba(45,106,79,.3)">
+        ✅ Résultat enregistré ! Ton professeur pourra le consulter.
+      </div>
+    </div>
+
+    <div class="results-breakdown">
+      <h3>📊 Détail par partie</h3>
+      <div id="breakdownRows"></div>
+    </div>
+
+    <div class="remarks-box" id="remarksBox">
+      <h4>📝 Barème de correction (parties ouvertes)</h4>
+      <p id="remarksText"></p>
+    </div>
+
+    <button class="restart-btn" onclick="restartExam()">↺ Recommencer l'évaluation</button>
+
+    <!-- Accès tableau de bord -->
+    <div style="margin-top:32px;padding:22px;background:rgba(253,248,240,.04);border:1px solid rgba(212,168,83,.12);border-radius:16px;text-align:center">
+      <div style="font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(212,168,83,.4);margin-bottom:6px">Espace Enseignant</div>
+      <p style="font-size:.8rem;color:rgba(253,248,240,.35);margin-bottom:14px;line-height:1.6">Consultez les notes de tous les élèves et exportez-les en CSV.</p>
+      <button onclick="showDashboard()" style="padding:11px 26px;background:rgba(212,168,83,.1);border:1px solid rgba(212,168,83,.22);border-radius:50px;color:var(--gold);font-family:'Jost',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;transition:.2s" onmouseover="this.style.background='rgba(212,168,83,.2)'" onmouseout="this.style.background='rgba(212,168,83,.1)'">
+        📊 Tableau de bord enseignant →
+      </button>
+    </div>
+  </div><!-- /results-inner -->
+
+  <!-- ══ TABLEAU DE BORD ENSEIGNANT ══ -->
+  <div id="dashboard" style="display:none;max-width:980px;margin:32px auto;padding:0 20px 60px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.7rem;color:var(--gold)">📊 Notes des élèves</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="exportCSV()" style="padding:9px 18px;background:rgba(45,106,79,.2);border:1px solid rgba(45,106,79,.4);border-radius:50px;color:#6fcf97;font-family:'Jost',sans-serif;font-size:.75rem;font-weight:700;cursor:pointer">⬇️ Exporter CSV</button>
+        <button onclick="clearAll()" style="padding:9px 18px;background:rgba(139,26,26,.18);border:1px solid rgba(139,26,26,.3);border-radius:50px;color:#f8a0a0;font-family:'Jost',sans-serif;font-size:.75rem;font-weight:700;cursor:pointer">🗑️ Vider</button>
+        <button onclick="hideDashboard()" style="padding:9px 18px;background:rgba(253,248,240,.06);border:1px solid rgba(253,248,240,.1);border-radius:50px;color:rgba(253,248,240,.4);font-family:'Jost',sans-serif;font-size:.75rem;font-weight:700;cursor:pointer">✕ Fermer</button>
+      </div>
+    </div>
+    <!-- Stats rapides -->
+    <div id="dashStats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px"></div>
+    <!-- Table -->
+    <div style="overflow-x:auto;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.35)">
+      <table style="width:100%;border-collapse:collapse;min-width:780px;font-size:.78rem">
+        <thead>
+          <tr id="dashHead" style="background:rgba(26,13,5,.95)"></tr>
+        </thead>
+        <tbody id="dashBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div><!-- /results-page -->
+
+<script>
+// ════════════════════════════════
+// ÉTAT GLOBAL
+// ════════════════════════════════
+let currentPart = 0;
+const TOTAL_PARTS = 6;
+const matchState = {};
+let grilleData = [];
+let eleveInfo = { prenom:'', nom:'', classe:'' };
+let lastResult = null;
+const STORAGE_KEY = 'csvca_choco_results';
+
+const grilleCriteria = [
+  {label:'Accueil professionnel',  attend:'Salutation, sourire, contact visuel',         indicateurs:'Bonjour + Madame/Monsieur, attitude ouverte, disponibilité',         max:1},
+  {label:'Découverte des besoins', attend:'Questions ouvertes, écoute active',            indicateurs:'Qui ? Pour qui ? Pourquoi ? Budget ? Contraintes ? Goûts ?',         max:2},
+  {label:'Reformulation',          attend:'Résume le besoin avant de proposer',           indicateurs:'«Si je comprends bien… / Vous recherchez… / Pour vous, l\'essentiel c\'est…»', max:1},
+  {label:'Identification SONCASE', attend:'Repère la motivation principale du client',    indicateurs:'Nomme ou démontre la dominante par ses arguments',                   max:1},
+  {label:'Connaissance produit',   attend:'Marque, gamme, composition, origine correctes',indicateurs:'Au moins 3 éléments factuels et exacts sur le produit proposé',     max:2},
+  {label:'Argumentation CAP',      attend:'Caractéristique → Avantage → Preuve',         indicateurs:'Un argument complet C+A+P visible dans le dialogue',                 max:2},
+  {label:'Réponse aux objections', attend:'Reformule l\'objection, répond, valide',       indicateurs:'Pas de déni — technique AAA ou CRAC identifiable',                  max:2},
+  {label:'Annonce du prix',        attend:'Prix annoncé clairement, valorisé',            indicateurs:'Prix dit naturellement, justifié par rapport qualité ou remise',     max:1},
+  {label:'Vente additionnelle',    attend:'Propose produit complémentaire pertinent',     indicateurs:'Cohérent avec le profil client et le produit principal',             max:1},
+  {label:'Conclusion & Congé',     attend:'Conclut la vente, fidélise, au revoir pro',   indicateurs:'Reformulation finale + proposition d\'achat + «Bonne journée / Merci»', max:2},
+];
+
+// ════════════════════════════════
+// COVER → EXAM
+// ════════════════════════════════
+function startExam(){
+  const prenom = document.getElementById('eleve-prenom').value.trim();
+  const nom    = document.getElementById('eleve-nom').value.trim();
+  const classe = document.getElementById('eleve-classe').value.trim();
+  const err    = document.getElementById('cover-error');
+  if(!prenom || !nom){
+    err.style.display = 'block';
+    document.getElementById('eleve-prenom').focus();
+    return;
+  }
+  err.style.display = 'none';
+  eleveInfo = { prenom, nom, classe: classe || 'CSVCA' };
+  // Afficher nom dans header
+  const he = document.getElementById('headerEleve');
+  he.textContent = prenom + ' ' + nom.toUpperCase();
+  he.style.display = 'block';
+
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('examInterface').style.display = 'block';
+  initGrille();
+  updateProgress();
+  window.scrollTo(0,0);
+}
+
+// ════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════
+function goToPart(idx){
+  document.querySelectorAll('.part').forEach(p => p.classList.remove('active'));
+  document.getElementById('part' + idx).classList.add('active');
+  currentPart = idx;
+  document.querySelectorAll('.part-btn').forEach((b,i) => {
+    b.classList.remove('active');
+    if(i < idx) b.classList.add('done');
+  });
+  const navBtn = document.getElementById('pnav' + idx);
+  if(navBtn){ navBtn.classList.add('active'); navBtn.classList.remove('done'); }
+  updateProgress();
+  window.scrollTo(0,0);
+}
+
+function updateProgress(){
+  const pct = (currentPart / TOTAL_PARTS) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = 'Partie ' + (currentPart+1) + '/' + TOTAL_PARTS;
+}
+
+// ════════════════════════════════
+// MCQ
+// ════════════════════════════════
+function selectMcq(el, qid){
+  const container = el.closest('.mcq-opts');
+  if(container.dataset.locked) return;
+  container.querySelectorAll('.mcq-opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  container.dataset.selected = [...container.querySelectorAll('.mcq-opt')].indexOf(el);
+}
+
+// ════════════════════════════════
+// VRAI/FAUX
+// ════════════════════════════════
+function selectTf(btn, qid, correct){
+  const row = btn.closest('.tf-row');
+  if(row.dataset.locked) return;
+  row.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('sel','correct','wrong'));
+  btn.classList.add('sel');
+  row.dataset.selected = btn.dataset.val;
+}
+
+// ════════════════════════════════
+// MATCHING
+// ════════════════════════════════
+function matchSel(el, type, containerId){
+  const container = document.getElementById(containerId);
+  if(!matchState[containerId]) matchState[containerId] = {term:null, def:null};
+  const ms = matchState[containerId];
+  if(el.classList.contains('ok') || el.classList.contains('ko')) return;
+  ms[type] = el;
+  container.querySelectorAll('.match-item').forEach(i => {
+    if(!i.classList.contains('ok') && !i.classList.contains('ko')) i.classList.remove('sel');
+  });
+  el.classList.add('sel');
+  if(ms.term && ms.def){
+    const ok = ms.term.dataset.id === ms.def.dataset.id;
+    ms.term.classList.remove('sel'); ms.def.classList.remove('sel');
+    ms.term.classList.add(ok?'ok':'ko');
+    ms.def.classList.add(ok?'ok':'ko');
+    matchState[containerId] = {term:null, def:null};
+  }
+}
+
+// ════════════════════════════════
+// CLIENT SELECTION
+// ════════════════════════════════
+function selectClient(id){
+  document.getElementById('clientA').style.borderColor = id==='A' ? 'var(--gold)' : 'var(--border)';
+  document.getElementById('clientB').style.borderColor = id==='B' ? 'var(--gold)' : 'var(--border)';
+  document.getElementById('clientChoice').value = id;
+}
+
+// ════════════════════════════════
+// GRILLE JEU DE RÔLE
+// ════════════════════════════════
+function initGrille(){
+  grilleData = grilleCriteria.map(c => ({...c, score:0}));
+  const tbody = document.getElementById('grilleBody');
+  tbody.innerHTML = grilleData.map((c,i) => `
+    <tr>
+      <td style="text-align:center;font-weight:700;color:var(--caramel);font-size:.8rem">${i+1}</td>
+      <td style="font-weight:600;color:var(--ink);font-size:.82rem">${c.label}</td>
+      <td style="font-size:.77rem;color:#666;line-height:1.5">${c.attend}</td>
+      <td style="font-size:.75rem;color:#888;line-height:1.5">${c.indicateurs}</td>
+      <td>
+        <div class="stars" id="stars${i}">
+          ${Array.from({length:c.max},(_,s)=>`<span class="star" onclick="setStar(${i},${s+1})" title="${s+1} pt">⭐</span>`).join('')}
+        </div>
+      </td>
+    </tr>`).join('');
+  updateGrilleTotal();
+}
+
+function setStar(row, val){
+  grilleData[row].score = val;
+  const stars = document.getElementById('stars'+row).querySelectorAll('.star');
+  stars.forEach((s,i) => s.classList.toggle('lit', i < val));
+  updateGrilleTotal();
+}
+
+function updateGrilleTotal(){
+  const total = grilleData.reduce((s,c) => s+c.score, 0);
+  document.getElementById('totalGrille').textContent = total;
+  const badge = document.getElementById('levelBadge');
+  if(total >= 12){ badge.textContent = 'Excellent ✅'; badge.className = 'level-badge level-a'; }
+  else if(total >= 8){ badge.textContent = 'Satisfaisant 👍'; badge.className = 'level-badge level-b'; }
+  else { badge.textContent = 'À retravailler 💪'; badge.className = 'level-badge level-c'; }
+}
+
+// ════════════════════════════════
+// CALCUL SCORE AUTO
+// ════════════════════════════════
+function calcAutoScore(){
+  let score = 0;
+  const details = {};
+
+  // — PARTIE I (20 pts) —
+  let p1 = 0;
+  const q1 = document.querySelector('[data-q="q1"]');
+  if(q1 && q1.dataset.selected === '2') p1 += 2;
+  const q2 = document.querySelector('[data-q="q2"]');
+  if(q2 && q2.dataset.selected === '1') p1 += 2;
+  const q3 = document.querySelector('[data-q="q3"]');
+  if(q3 && q3.dataset.selected === '0') p1 += 2;
+  const q4 = document.querySelector('[data-q="q4"]');
+  if(q4 && q4.dataset.selected === 'faux') p1 += 1;
+  const q5 = document.querySelector('[data-q="q5"]');
+  if(q5 && q5.dataset.selected === 'vrai') p1 += 1;
+  const ordreInputs = document.querySelectorAll('#ordreQ6 input');
+  const correctOrder = {fermentation:1,'torréfaction':2,conchage:3,'tempérage':4,moulage:5};
+  ordreInputs.forEach(inp => { if(parseInt(inp.value) === correctOrder[inp.dataset.step]) p1 += 0.8; });
+  const fq7 = document.getElementById('fq7')?.value.toLowerCase().trim();
+  if(fq7 && fq7.includes('ballotin')) p1 += 1;
+  const q8 = document.querySelector('[data-q="q8"]');
+  if(q8 && q8.dataset.selected === '2') p1 += 2;
+  const q9 = document.querySelector('[data-q="q9"]');
+  if(q9 && q9.dataset.selected === '2') p1 += 1;
+  const q10a = document.getElementById('fq10a')?.value.toLowerCase();
+  const q10b = document.getElementById('fq10b')?.value.toLowerCase();
+  const nobles = ['criollo','trinitario'];
+  if(q10a && nobles.some(n=>q10a.includes(n))) p1++;
+  if(q10b && nobles.some(n=>q10b.includes(n))) p1++;
+  const q11 = document.getElementById('fq11')?.value.toLowerCase();
+  if(q11 && q11.includes('belgian chocolate')) p1 += 2;
+  p1 = Math.min(20, Math.round(p1));
+  details['I — Connaissances'] = {score: p1, max: 20};
+  score += p1;
+
+  // — PARTIE II (15 pts) —
+  let p2 = 0;
+  const matchQ12 = document.getElementById('matchQ12');
+  p2 += matchQ12 ? matchQ12.querySelectorAll('.match-item:not(.match-def).ok').length : 0;
+  const q13 = document.querySelector('[data-q="q13"]');
+  if(q13 && q13.dataset.selected === '1') p2 += 2;
+  const q14 = document.querySelector('[data-q="q14"]');
+  if(q14 && q14.dataset.selected === '2') p2 += 2;
+  const tq15 = document.getElementById('tq15')?.value.trim();
+  const tq16 = document.getElementById('tq16')?.value.trim();
+  if(tq15 && tq15.length > 40) p2 += 3;
+  if(tq16 && tq16.length > 40) p2 += 3;
+  p2 = Math.min(15, p2);
+  details['II — Assortiment'] = {score: p2, max: 15};
+  score += p2;
+
+  // — PARTIE III (10 pts) —
+  let p3 = 0;
+  const sonFields = ['sonS','sonO','sonN','sonC','sonA','sonS2','sonE'];
+  const sonFilled = sonFields.filter(id => { const v = document.getElementById(id)?.value.trim(); return v && v.length > 5; }).length;
+  p3 += Math.min(4, Math.round(sonFilled * 4/7));
+  const s18a = document.getElementById('son18a')?.value;
+  const s18b = document.getElementById('son18b')?.value;
+  const s18c = document.getElementById('son18c')?.value;
+  if(s18a && s18a.includes('Sécurité')) p3 += 1;
+  if(s18b && s18b.includes('Orgueil')) p3 += 1;
+  if(s18c && s18c.includes('Environnement')) p3 += 1;
+  const tq19 = document.getElementById('tq19')?.value.trim();
+  if(tq19 && tq19.length > 50) p3 += 3;
+  p3 = Math.min(10, p3);
+  details['III — SONCASE'] = {score: p3, max: 10};
+  score += p3;
+
+  // — PARTIE IV (10 pts) —
+  let p4 = 0;
+  const cq20a = parseFloat(document.getElementById('cq20a')?.value);
+  if(Math.abs(cq20a - 84) < 0.5) p4 += 1;
+  const cq20b = parseFloat(document.getElementById('cq20b')?.value);
+  if(Math.abs(cq20b - 12.6) < 0.1) p4 += 1;
+  const cq21a = parseFloat(document.getElementById('cq21a')?.value);
+  if(Math.abs(cq21a - 5.4) < 0.05) p4 += 1;
+  const cq21b = parseFloat(document.getElementById('cq21b')?.value);
+  if(Math.abs(cq21b - 396) < 0.5) p4 += 1;
+  const cq22a = parseFloat(document.getElementById('cq22a')?.value);
+  if(Math.abs(cq22a - 0.176) < 0.02) p4 += 1;
+  const cq22b = parseFloat(document.getElementById('cq22b')?.value);
+  if(Math.abs(cq22b - 3.376) < 0.05) p4 += 1;
+  const pvHT = 19.90/1.055;
+  const cq23a = parseFloat(document.getElementById('cq23a')?.value);
+  if(Math.abs(cq23a - pvHT) < 0.1) p4 += 1;
+  const cq23b = parseFloat(document.getElementById('cq23b')?.value);
+  if(Math.abs(cq23b - (pvHT-8)) < 0.1) p4 += 1;
+  const cq23c = parseFloat(document.getElementById('cq23c')?.value);
+  if(Math.abs(cq23c - (pvHT-8)/8*100) < 1) p4 += 2;
+  p4 = Math.min(10, p4);
+  details['IV — Calculs'] = {score: p4, max: 10};
+  score += p4;
+
+  // — PARTIE V (10 pts) —
+  let p5 = 0;
+  const capC = document.getElementById('capC')?.value.trim();
+  const capA = document.getElementById('capA')?.value.trim();
+  const capP = document.getElementById('capP')?.value.trim();
+  if(capC && capC.length > 20) p5 += 1;
+  if(capA && capA.length > 20) p5 += 1;
+  if(capP && capP.length > 20) p5 += 1;
+  const tq25 = document.getElementById('tq25')?.value.trim();
+  if(tq25 && tq25.length > 60) p5 += 4;
+  const tq26 = document.getElementById('tq26')?.value.trim();
+  if(tq26 && tq26.length > 40) p5 += 3;
+  p5 = Math.min(10, p5);
+  details['V — Argumentation'] = {score: p5, max: 10};
+  score += p5;
+
+  // — PARTIE VI (15 pts) —
+  const p6 = Math.min(15, grilleData.reduce((s,c) => s+c.score, 0));
+  details['VI — Jeu de rôle'] = {score: p6, max: 15};
+  score += p6;
+
+  return {total: Math.min(80, score), details};
+}
+
+// ════════════════════════════════
+// SUBMIT
+// ════════════════════════════════
+function submitExam(){
+  const {total, details} = calcAutoScore();
+  lastResult = {total, details};
+  displayResults(total, details);
+}
+
+// ════════════════════════════════
+// DISPLAY RESULTS
+// ════════════════════════════════
+function getMention(total){
+  const pct = (total/80)*100;
+  if(pct >= 80) return {label:'Très Bien', cls:'grade-a'};
+  if(pct >= 65) return {label:'Bien', cls:'grade-a'};
+  if(pct >= 50) return {label:'Assez Bien', cls:'grade-b'};
+  if(pct >= 40) return {label:'Passable', cls:'grade-b'};
+  return {label:'Insuffisant', cls:'grade-c'};
+}
+
+function displayResults(total, details){
+  document.getElementById('examInterface').style.display = 'none';
+  const rp = document.getElementById('resultsPage');
+  rp.classList.add('show');
+
+  // Nom élève
+  document.getElementById('resultsEleve').textContent =
+    `${eleveInfo.prenom} ${eleveInfo.nom.toUpperCase()} · ${eleveInfo.classe} · ${new Date().toLocaleDateString('fr-FR')}`;
+
+  document.getElementById('bigScore').innerHTML = total + '<span class="score-denom">/80</span>';
+  const {label, cls} = getMention(total);
+  document.getElementById('resultGrade').textContent = label;
+  document.getElementById('resultGrade').className = 'result-grade ' + cls;
+
+  const msgs = {
+    'Très Bien':'Excellente maîtrise du chocolat en vente conseil ! Tu es prêt(e) pour te lancer en situation réelle.',
+    'Bien':'Bon niveau général. Quelques points à consolider sur les calculs ou l\'argumentation, mais l\'essentiel est maîtrisé.',
+    'Assez Bien':'Des bases solides, mais certaines parties nécessitent un travail approfondi. Revois les connaissances produit et SONCASE.',
+    'Passable':'Des lacunes à combler. Concentre-toi sur les connaissances de base et les techniques de vente.',
+    'Insuffisant':'Il faut reprendre l\'ensemble du cours. Commence par les modules Histoire et Types de chocolat.',
+  };
+  document.getElementById('resultMsg').textContent = msgs[label] || '';
+
+  // Breakdown
+  const brows = document.getElementById('breakdownRows');
+  brows.innerHTML = Object.entries(details).map(([name, {score, max}]) => {
+    const pct2 = (score/max)*100;
+    return `<div class="breakdown-row">
+      <span class="breakdown-name">${name}</span>
+      <div class="breakdown-bar"><div class="breakdown-fill" data-pct="${pct2}" style="width:0"></div></div>
+      <span class="breakdown-score">${score}<span style="font-size:.75rem;color:rgba(212,168,83,.4)">/${max}</span></span>
+    </div>`;
+  }).join('');
+  setTimeout(() => {
+    document.querySelectorAll('.breakdown-fill').forEach(b => { b.style.width = b.dataset.pct+'%'; });
+  }, 300);
+
+  document.getElementById('remarksText').textContent =
+    'Les parties II (Q15-16), III (Q17/19), V et VI comportent des questions ouvertes. ' +
+    'Le score est indicatif : une correction enseignant est recommandée. ' +
+    'Le barème complet est disponible auprès de votre professeur.';
+
+  window.scrollTo(0,0);
+}
+
+// ════════════════════════════════
+// SAUVEGARDE localStorage
+// ════════════════════════════════
+function saveToStorage(){
+  if(!lastResult) return;
+  const {total, details} = lastResult;
+  const {label} = getMention(total);
+  const record = {
+    nom: eleveInfo.nom,
+    prenom: eleveInfo.prenom,
+    classe: eleveInfo.classe,
+    date: new Date().toLocaleDateString('fr-FR'),
+    heure: new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}),
+    total,
+    mention: label,
+    parties: Object.fromEntries(Object.entries(details).map(([k,v]) => [k, v.score])),
+  };
+  try {
+    const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    // Remplacer si même élève+date
+    const idx = existing.findIndex(r => r.nom===record.nom && r.prenom===record.prenom && r.date===record.date);
+    if(idx >= 0) existing[idx] = record; else existing.push(record);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+    document.getElementById('saveConfirm').style.display = 'inline-block';
+    document.getElementById('saveBtn').textContent = '✅ Enregistré';
+  } catch(e) {
+    alert('Impossible d\'enregistrer : ' + e.message);
+  }
+}
+
+// ════════════════════════════════
+// IMPRESSION
+// ════════════════════════════════
+function printResult(){
+  window.print();
+}
+
+// ════════════════════════════════
+// TABLEAU DE BORD
+// ════════════════════════════════
+function showDashboard(){
+  const dash = document.getElementById('dashboard');
+  dash.style.display = 'block';
+  renderDashboard();
+  dash.scrollIntoView({behavior:'smooth'});
+}
+
+function hideDashboard(){
+  document.getElementById('dashboard').style.display = 'none';
+}
+
+function renderDashboard(){
+  const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  const cols = ['Nom','Prénom','Classe','I /20','II /15','III /10','IV /10','V /10','VI /15','Total /80','Mention','Date','Heure'];
+
+  // Header
+  document.getElementById('dashHead').innerHTML = cols.map(c =>
+    `<th style="padding:12px 14px;text-align:left;font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--gold);background:rgba(26,13,5,.95);border-bottom:1px solid rgba(212,168,83,.15);white-space:nowrap">${c}</th>`
+  ).join('');
+
+  // Rows
+  const tbody = document.getElementById('dashBody');
+  if(!data.length){
+    tbody.innerHTML = `<tr><td colspan="${cols.length}" style="text-align:center;padding:30px;color:rgba(253,248,240,.3);font-size:.85rem;background:rgba(42,18,9,.7)">Aucun résultat enregistré pour le moment.</td></tr>`;
+  } else {
+    tbody.innerHTML = data.map((r, i) => {
+      const pct = (r.total/80)*100;
+      const bg = i%2===0 ? 'rgba(42,18,9,.8)' : 'rgba(58,26,12,.6)';
+      const scoreColor = pct>=80 ? '#6fcf97' : pct>=50 ? '#f2c94c' : '#eb5757';
+      const partScores = Object.values(r.parties || {}).map(v =>
+        `<td style="padding:10px 14px;text-align:center;color:rgba(253,248,240,.65);background:${bg};border-bottom:1px solid rgba(255,255,255,.04)">${v}</td>`
+      ).join('');
+      return `<tr>
+        <td style="padding:10px 14px;color:var(--cream);font-weight:600;background:${bg};border-bottom:1px solid rgba(255,255,255,.04)">${r.nom}</td>
+        <td style="padding:10px 14px;color:rgba(253,248,240,.8);background:${bg};border-bottom:1px solid rgba(255,255,255,.04)">${r.prenom}</td>
+        <td style="padding:10px 14px;color:rgba(253,248,240,.55);font-size:.75rem;background:${bg};border-bottom:1px solid rgba(255,255,255,.04)">${r.classe}</td>
+        ${partScores}
+        <td style="padding:10px 14px;text-align:center;font-weight:700;font-size:1.05rem;color:${scoreColor};background:${bg};border-bottom:1px solid rgba(255,255,255,.04)">${r.total}</td>
+        <td style="padding:10px 14px;background:${bg};border-bottom:1px solid rgba(255,255,255,.04)">
+          <span style="padding:3px 10px;border-radius:50px;font-size:.7rem;font-weight:700;background:${pct>=80?'rgba(45,106,79,.25)':pct>=50?'rgba(133,100,4,.25)':'rgba(139,26,26,.25)'};color:${scoreColor}">${r.mention}</span>
+        </td>
+        <td style="padding:10px 14px;color:rgba(253,248,240,.45);font-size:.75rem;background:${bg};border-bottom:1px solid rgba(255,255,255,.04)">${r.date}</td>
+        <td style="padding:10px 14px;color:rgba(253,248,240,.35);font-size:.72rem;background:${bg};border-bottom:1px solid rgba(255,255,255,.04)">${r.heure||''}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Stats
+  renderStats(data);
+}
+
+function renderStats(data){
+  const stats = document.getElementById('dashStats');
+  if(!data.length){ stats.innerHTML=''; return; }
+  const totals = data.map(r => r.total);
+  const moy = (totals.reduce((a,b)=>a+b,0)/totals.length).toFixed(1);
+  const max = Math.max(...totals);
+  const min = Math.min(...totals);
+  const above50 = totals.filter(t => t/80>=0.5).length;
+  stats.innerHTML = [
+    {ico:'👥', lbl:'Élèves', val: data.length},
+    {ico:'📊', lbl:'Moyenne', val: moy+'/80'},
+    {ico:'🏆', lbl:'Meilleur', val: max+'/80'},
+    {ico:'📉', lbl:'Plus bas', val: min+'/80'},
+    {ico:'✅', lbl:'≥ 50%', val: above50+'/'+data.length},
+  ].map(s => `
+    <div style="background:rgba(253,248,240,.05);border:1px solid rgba(212,168,83,.12);border-radius:12px;padding:16px;text-align:center">
+      <div style="font-size:1.4rem">${s.ico}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--gold);font-weight:700;margin-top:4px">${s.val}</div>
+      <div style="font-size:.65rem;color:rgba(253,248,240,.35);text-transform:uppercase;letter-spacing:.1em;margin-top:2px">${s.lbl}</div>
+    </div>`).join('');
+}
+
+// ════════════════════════════════
+// EXPORT CSV
+// ════════════════════════════════
+function exportCSV(){
+  const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  if(!data.length){ alert('Aucun résultat à exporter.'); return; }
+
+  const headers = ['Nom','Prénom','Classe','I - Connaissances /20','II - Assortiment /15','III - SONCASE /10','IV - Calculs /10','V - Argumentation /10','VI - Jeu de rôle /15','TOTAL /80','Mention','Date','Heure'];
+  const rows = data.map(r => {
+    const ps = r.parties ? Object.values(r.parties) : Array(6).fill('');
+    return [r.nom, r.prenom, r.classe, ...ps, r.total, r.mention, r.date, r.heure||''].join(';');
+  });
+
+  const csv = '\uFEFF' + [headers.join(';'), ...rows].join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `notes_chocolat_CSVCA_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ════════════════════════════════
+// VIDER LES DONNÉES
+// ════════════════════════════════
+function clearAll(){
+  if(confirm('⚠️ Voulez-vous vraiment effacer TOUS les résultats enregistrés ? Cette action est irréversible.')){
+    localStorage.removeItem(STORAGE_KEY);
+    renderDashboard();
+  }
+}
+
+// ════════════════════════════════
+// RESTART
+// ════════════════════════════════
+function restartExam(){
+  location.reload();
+}
+</script>
+</body>
+</html>
